@@ -33,9 +33,10 @@ module fpm {
 	    view.zoom_center(1.1);
 	    break;
 	  }
-	  n1.draw_scaled();
-	  n2.draw_scaled();
-	  n3.draw_scaled();
+	  //n1.draw();
+	  //n2.draw();
+	  //n3.draw();
+	  gd.update(graph);
 	});
       });
     }

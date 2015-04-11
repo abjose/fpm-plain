@@ -6,6 +6,14 @@ module fpm {
     
     constructor() {
       //this.elements = [];
+
+      // just pass graph in constructor?
+      // but...should be pretty static?
+    }
+
+    update(g: Graph) {
+      this.draw_edges(g);
+      this.draw_nodes(g);
     }
 
     draw_nodes(g: Graph) {
@@ -18,11 +26,8 @@ module fpm {
 
       var node_ids = Object.keys(g.nodes);
       for (var i = 0; i < node_ids.length; i++) {
-	//var node = g.nodes[node_ids[i]];
-	// ehhhh don't do this with jquery....
-	//var text_area = document.createElement("textarea");
-	//text_area.style
-	//document.appendChild(text_area);
+	var node = g.nodes[node_ids[i]];
+	node.draw();
       }
     }
 
@@ -61,7 +66,6 @@ module fpm {
       ctx.save();
       ctx.beginPath();
       ctx.translate(pt.x, pt.y);
-      console.log(this.arrow_angle(node1, node2));
       ctx.rotate(this.arrow_angle(node1, node2));
       // draw arrow
       ctx.moveTo(0, 0);
