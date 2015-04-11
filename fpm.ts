@@ -1,9 +1,15 @@
 /// <reference path="Graph.ts" />
 /// <reference path="GraphDrawer.ts" />
+/// <reference path="InputManager.ts" />
 /// <reference path="ViewRect.ts" />
 /// <reference path="TextBox.ts" />
 
 /*
+
+TODO NOW
+- move view into graphdrawer (i.e. construct it there...)
+  then maybe pass view to things when drawing
+
 TODO:
 - add key handler stuff so can have multiple keys pressed at once
 - fix mousemove event so not specific to textareas - if dragging, will
@@ -129,6 +135,8 @@ Probably less important stuff
 
 // TODO: really need to have a 'draw' method instead of doing in constructor
 // probably pass graphdrawer to TextBox so can register redraws better?
+
+var im = new fpm.InputManager();
 
 var graph = new fpm.Graph();
 

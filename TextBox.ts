@@ -39,6 +39,10 @@ module fpm {
 	  textbox.x_offset = mouse_x - box_x;
 	  textbox.y_offset = mouse_y - box_y;
 	  textbox.dragging = true;
+	  if (!im.is_pressed('shift')) {
+	    im.conditional_clear_selection();
+	  }
+	  im.add_selection(textbox);
 	}
       });
 
@@ -46,7 +50,8 @@ module fpm {
 	textbox.dragging = false;
 	textbox.w = parseInt($(this).css("width"))
 	textbox.h = parseInt($(this).css("height"))
-	test_redraw_lines();
+	//test_redraw_lines();
+	//gd.update(graph);
       });
 
       $(this.text_area).dblclick(function(e) {
@@ -58,23 +63,29 @@ module fpm {
 	textbox.editing = false;
       });
 
-      $(this.text_area).mousemove(function(e) {
-	if (textbox.dragging) {
-	  var mouse_x = e.pageX;// + 'px';
-	  var mouse_y = e.pageY;// + 'px';
-	  textbox.move_to(mouse_x - textbox.x_offset,
-			  mouse_y - textbox.y_offset);
-	}
-      });
+      // $(this.text_area).mousemove(function(e) {
+      // 	if (textbox.dragging) {
+      // 	  var mouse_x = e.pageX; var mouse_y = e.pageY;
+      // 	  textbox.move_to(mouse_x - textbox.x_offset,
+      // 			  mouse_y - textbox.y_offset);
+      // 	  //textbox.draw();
+      // 	  gd.update(graph);
+      // 	}
+      // });
 
       $('#myDiv').append(this.text_area);
     }
 
-    draw_scaled() {
+    draw() {
       var scaled = this.calculate_scaled();
+      var color = 'black';
+      if (im.is_selected(this)) {
+	color = 'red';
+      }
       $(this.text_area).css({
 	"left": scaled.x+'px', "top": scaled.y+'px',
-	"transform": "scale("+scaled.w+","+scaled.h+")"​});
+	"transform": "scale("+scaled.w+","+scaled.h+")"​,
+	"border-color": color});
     }
 
     calculate_scaled() {
@@ -85,13 +96,8 @@ module fpm {
     }
 
     move_to(x: number, y: number) {
-      // Kinda annoying - need to store translated coords for canvas
-      // wait...pretty sure you're doing something wrong
-      // really necessary to go in both directions?
       var pt = viewrect.screen_to_world(x, y);
       this.x = pt.x; this.y = pt.y;
-      // Passed coords are in screen coordinates, so pass to css directly.
-      $(this.text_area).css({"left": x+'px', "top": y+'px'});
     }
   }
 }
