@@ -63,6 +63,7 @@ module fpm {
 	    var ids = Object.keys(self.selected);
 	    for (var i = 0; i < ids.length; ++i) {
 	      var node = self.selected[ids[i]];
+	      if (node.editing) continue;
 	      //console.log(node);
 	      node.move_to(mouse_x - node.x_offset,
 			   mouse_y - node.y_offset);
