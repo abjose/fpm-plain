@@ -47,6 +47,8 @@ module fpm {
 	});
       });
 
+      // screwing up a bit when multiple selections and resize one
+      
       $(function(){
 	$(document).mouseup(function(e){
 	  delete self.pressed['mouse'];
@@ -120,9 +122,12 @@ module fpm {
       this.selected = {};
     }
 
-    conditional_clear_selection() {
-      if (Object.keys(this.selected).length == 1) {
-	this.clear_selection();
+    conditional_clear_selection(node) {
+      if (!im.is_pressed('shift')) {
+	if (Object.keys(this.selected).length == 1 ||
+	    !(node.id in this.selected)) {
+	  this.clear_selection();
+	}
       }
     }
     

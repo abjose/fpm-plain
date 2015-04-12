@@ -29,12 +29,10 @@ module fpm {
 
       $(this.text_area).mousedown(function(e) {
 	if (!textbox.editing) {
-	  e.preventDefault();
 	  // Kinda like without preventDefault, can edit immediately.
 	  // but selection issues...
-	  if (!im.is_pressed('shift')) {
-	    im.conditional_clear_selection();
-	  }
+	  e.preventDefault();
+	  im.conditional_clear_selection(textbox);
 	  im.add_selection(textbox);
 	}
       });
