@@ -5,7 +5,6 @@ module fpm {
     text: string;
     text_area: any; // ...
     x_offset: number; y_offset: number;
-    dragging: boolean;
     editing: boolean;
 
     constructor(args) {
@@ -15,7 +14,6 @@ module fpm {
       this.text = args.text;
 
       this.x_offset = 0; this.y_offset = 0;
-      this.dragging = false;
       this.editing = false;
 
       var textbox = this;
@@ -32,13 +30,8 @@ module fpm {
       $(this.text_area).mousedown(function(e) {
 	if (!textbox.editing) {
 	  e.preventDefault();
-	  var box_x = parseInt($(this).css("left"))
-	  var box_y = parseInt($(this).css("top"))
-	  var mouse_x = e.pageX;// + 'px';
-	  var mouse_y = e.pageY;// + 'px';
-	  textbox.x_offset = mouse_x - box_x;
-	  textbox.y_offset = mouse_y - box_y;
-	  textbox.dragging = true;
+	  // Kinda like without preventDefault, can edit immediately.
+	  // but selection issues...
 	  if (!im.is_pressed('shift')) {
 	    im.conditional_clear_selection();
 	  }
@@ -47,11 +40,8 @@ module fpm {
       });
 
       $(this.text_area).mouseup(function(e) {
-	textbox.dragging = false;
 	textbox.w = parseInt($(this).css("width"))
 	textbox.h = parseInt($(this).css("height"))
-	//test_redraw_lines();
-	//gd.update(graph);
       });
 
       $(this.text_area).dblclick(function(e) {
@@ -62,16 +52,6 @@ module fpm {
       $(this.text_area).blur(function() {
 	textbox.editing = false;
       });
-
-      // $(this.text_area).mousemove(function(e) {
-      // 	if (textbox.dragging) {
-      // 	  var mouse_x = e.pageX; var mouse_y = e.pageY;
-      // 	  textbox.move_to(mouse_x - textbox.x_offset,
-      // 			  mouse_y - textbox.y_offset);
-      // 	  //textbox.draw();
-      // 	  gd.update(graph);
-      // 	}
-      // });
 
       $('#myDiv').append(this.text_area);
     }
