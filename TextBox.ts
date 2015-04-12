@@ -32,8 +32,22 @@ module fpm {
 	  // Kinda like without preventDefault, can edit immediately.
 	  // but selection issues...
 	  e.preventDefault();
-	  im.conditional_clear_selection(textbox);
-	  im.add_selection(textbox);
+	  if (im.is_pressed('ctrl')) {
+	    var selected = im.get_selected();
+	    if (selected.length == 1) {
+	      var pred = im.selected[selected[0]];  // ugh pls switch to ids
+	      console.log(pred);
+	      if (!graph.edge_exists(pred, textbox)) {
+		graph.add_edge(pred, textbox);
+	      } else {
+		console.log('deleting?');
+		graph.remove_edge(pred, textbox);
+	      }
+	    }
+	  } else {
+	    im.conditional_clear_selection(textbox);
+	    im.add_selection(textbox);
+	  }
 	}
       });
 

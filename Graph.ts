@@ -26,6 +26,7 @@ module fpm {
       delete this.edges[node.id];
     }
 
+    // switch to using IDs?
     add_edge(n1: GraphNode, n2: GraphNode) {
       if (n1.id in this.nodes && n2.id in this.nodes) {
 	if (this.edges[n1.id] == undefined) {
@@ -46,6 +47,10 @@ module fpm {
       var node_edges = this.edges[node.id];
       if (node_edges == undefined) return [];
       return Object.keys(node_edges);
+    }
+    
+    edge_exists(n1: GraphNode, n2: GraphNode) {
+      return this.successors(n1).indexOf(n2.id) != -1;
     }
   }
 }

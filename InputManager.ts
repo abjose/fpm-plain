@@ -66,9 +66,7 @@ module fpm {
 	    for (var i = 0; i < ids.length; ++i) {
 	      var node = self.selected[ids[i]];
 	      if (node.editing) continue;
-	      //console.log(node);
-	      node.move_to(mouse_x - node.x_offset,
-			   mouse_y - node.y_offset);
+	      node.move_to(mouse_x - node.x_offset, mouse_y - node.y_offset);
 	    }
 	    gd.update(graph);
 	  }
@@ -84,6 +82,9 @@ module fpm {
 	  case 16: // shift
 	    self.pressed['shift'] = true;
 	    break;
+	  case 17: // control
+	    self.pressed['ctrl'] = true;
+	    break;
       	  }
       	});
       });
@@ -95,6 +96,10 @@ module fpm {
 	  case 16: // shift
 	    delete self.pressed['shift'];
 	    break;
+	  case 17: // control
+	    delete self.pressed['ctrl'];
+	    break;
+
       	  }
       	});
       });
@@ -129,6 +134,10 @@ module fpm {
 	  this.clear_selection();
 	}
       }
+    }
+
+    get_selected() {
+      return Object.keys(this.selected);
     }
     
   }
