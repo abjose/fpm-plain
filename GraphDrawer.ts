@@ -38,7 +38,7 @@ module fpm {
       var node_ids = Object.keys(g.nodes);
       for (var i = 0; i < node_ids.length; i++) {
 	var node1 = g.nodes[node_ids[i]];
-	var edge_ids = Object.keys(g.edges[node_ids[i]]);
+	var edge_ids = g.successors(node1);
 	for (var j = 0; j < edge_ids.length; j++) {
 	  var node2 = g.nodes[edge_ids[j]];
 	  this.draw_edge(node1, node2, ctx);

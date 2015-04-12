@@ -1,3 +1,4 @@
+/// <reference path="jquery.d.ts" />
 /// <reference path="Graph.ts" />
 /// <reference path="GraphDrawer.ts" />
 /// <reference path="InputManager.ts" />
@@ -9,27 +10,19 @@
 TODO NOW
 - move view into graphdrawer (i.e. construct it there...)
   then maybe pass view to things when drawing
+- add stuff to let you connect new nodes :D
+- get panning/scrolling working for navigation
+- ehhhh add jquery typescript thing
 
 TODO:
 - add key handler stuff so can have multiple keys pressed at once
-- fix mousemove event so not specific to textareas - if dragging, will
-  drag all textareas that are selected. This will be like 'highlighting' and
-  also fix issues with when you drag too fast.
-  same with mouse release
-- allow graph to update itself given diff?
-- get dragging to pay attention to mousemoves outside of textareas
-- get lines to redraw on zooming and panning around
-- scale everything in graph, not just stuff hardcoded
-- would be nice if could select multiple things (show selection with a div?
-  or on canvas?) and drag them all around...
+- allow graph to update itself given diff
 - allow connecting nodes with right click or something
 - make sure to update graph description as you're building the graph
-- MAKE STRUCTURE WAY FUCKING BETTER
 - add pictures and drawings :O
 - switch to dragging + zooming by scroll? but make sure still scrolls
   text area when you scroll in them...
-- new nodes should appear centered at click
-
+- maybe selection box you can drag out, select all of interior...
 
 Potential better structure...
 - move more global event handlers to graphdrawer?
@@ -157,7 +150,6 @@ var n3 = new fpm.TextBox({
 });
 var viewrect = new fpm.ViewRect();
 
-
 graph.add_node(n1);
 graph.add_node(n2);
 graph.add_node(n3);
@@ -165,13 +157,9 @@ graph.add_edge(n1, n2);
 graph.add_edge(n1, n3);
 graph.add_edge(n2, n1);
 graph.add_edge(n3, n2);
-console.log(graph);
 
 var gd = new fpm.GraphDrawer();
-gd.draw_nodes(graph);
-var test_redraw_lines = function() {
-  gd.draw_edges(graph);
-};
+gd.update(graph);
 
 // TODO: don't use jquery maybe
 
@@ -179,33 +167,17 @@ var test_redraw_lines = function() {
 $(function(){
   $(document).dblclick(function(e){
     if (e.target.type != 'textarea') {
-      // hack, should probably prevent something in textbox instead of checking
-      // target
+      // should probably prevent something in textbox instead of checking target
       var mouse_x = e.pageX;
       var mouse_y = e.pageY;
-      new fpm.TextBox({
+      var pt = viewrect.screen_to_world(e.pageX, e.pageY);
+      var w = 150; var h = 150;
+      graph.add_node(new fpm.TextBox({
 	id: "node"+Math.random(),
-	x: mouse_x, y: mouse_y, w: 150, h: 150,
+	x: pt.x - w/2, y: pt.y - h/2, w: w, h: h,
 	text: "New textbox!",
-      });
+      }));
+      gd.update(graph);
     }
   });
 });
-
-// get dragging to work even if dragging too fast
-// TODO: need some kind of global "is_dragging" thing, maybe a map or list
-// $(function(){
-//   $(document).dblclick(function(e){
-//     if (e.target.type != 'textarea') {
-//       // hack, should probably prevent something in textbox instead of checking
-//       // target
-//       var mouse_x = e.pageX;
-//       var mouse_y = e.pageY;
-//       new TextBox({
-// 	id: "node"+Math.random(),
-// 	x: mouse_x, y: mouse_y, w: 150, h: 150,
-// 	text: "New textbox!",
-//       });
-//     }
-//   });
-// });

@@ -9,10 +9,13 @@ module fpm {
   }
 
   export class Graph {
-    nodes = {};
-    edges = {};  // Track edges separately to make GraphNode more minimal.
+    nodes;
+    edges;  // Track edges separately to make GraphNode more minimal.
     
-    constructor() {}
+    constructor() {
+      this.nodes = {};
+      this.edges = {};
+    }
     
     add_node(node: GraphNode) {
       this.nodes[node.id] = node;
@@ -36,6 +39,13 @@ module fpm {
 
     remove_edge(n1: GraphNode, n2: GraphNode) {
       delete this.edges[n1.id][n2.id];
+    }
+
+    successors(node: GraphNode) {
+      // return node ids
+      var node_edges = this.edges[node.id];
+      if (node_edges == undefined) return [];
+      return Object.keys(node_edges);
     }
   }
 }
