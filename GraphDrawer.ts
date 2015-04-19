@@ -1,67 +1,51 @@
 module fpm {
   export class GraphDrawer {
-    // TODO: add a 'view'
     
-    //elements: any[];
-    
-    constructor() {
-      //this.elements = [];
+    constructor() {}
 
-      // just pass graph in constructor?
-      // but...should be pretty static?
+    update(user: User) {
+      this.draw_edges(user.get_graph() , user.view);
+      this.draw_nodes(user.get_graph(), user.view);
     }
 
-    update(g: Graph) {
-      this.draw_edges(g);
-      this.draw_nodes(g);
-    }
-
-    draw_nodes(g: Graph) {
-      // TODO: Add stuff like keeping a list of elements that you just update
-      // rather than redoing each time.
-
-      // just delete the old elements for now
-      //var element = document.getElementById("element-id");
-      //element.parentNode.removeChild(element);
-
-      var node_ids = Object.keys(g.nodes);
+    draw_nodes(graph: Graph, view: ViewRect) {
+      var node_ids = Object.keys(graph.nodes);
       for (var i = 0; i < node_ids.length; i++) {
-	var node = g.nodes[node_ids[i]];
-	node.draw();
+	var node = graph.nodes[node_ids[i]];
+	node.draw(view);
       }
     }
 
-    draw_edges(g: Graph) {
+    draw_edges(graph: Graph, view: ViewRect) {
       var canvas = document.getElementById('myCanvas');
       var ctx = canvas.getContext('2d');
       ctx.clearRect (0, 0, canvas.width, canvas.height );
-      var node_ids = Object.keys(g.nodes);
+      var node_ids = Object.keys(graph.nodes);
       for (var i = 0; i < node_ids.length; i++) {
-	var node1 = g.nodes[node_ids[i]];
-	var edge_ids = g.successors(node1);
+	var node1 = graph.nodes[node_ids[i]];
+	var edge_ids = graph.successors(node1);
 	for (var j = 0; j < edge_ids.length; j++) {
-	  var node2 = g.nodes[edge_ids[j]];
-	  this.draw_edge(node1, node2, ctx);
+	  var node2 = graph.nodes[edge_ids[j]];
+	  this.draw_edge(node1, node2, ctx, view);
 	}
       }
     }
 
-    draw_edge(node1, node2, ctx) {
+    draw_edge(node1, node2, ctx, view: ViewRect) {
       // this is pretty inefficient
       ctx.beginPath();
-      var p1 = viewrect.world_to_screen(node1.x, node1.y);
-      var p2 = viewrect.world_to_screen(node2.x, node2.y);
+      var p1 = view.world_to_screen(node1.x, node1.y);
+      var p2 = view.world_to_screen(node2.x, node2.y);
       ctx.moveTo(p1.x + node1.w * p1.sx / 2, p1.y + node1.h * p1.sy / 2);
       ctx.lineTo(p2.x + node2.w * p2.sx / 2, p2.y + node2.h * p2.sy / 2);
       ctx.stroke();
-      this.draw_arrow(node1, node2, ctx);
+      this.draw_arrow(node1, node2, ctx, view);
     }
 
-    draw_arrow(node1, node2, ctx) {
-      // drawing arrow for edge from node1 to node2
+    draw_arrow(node1, node2, ctx, view: ViewRect) {
       // get intersection and transform to screen coords
       var pt = this.arrow_pt(node1, node2);
-      pt = viewrect.world_to_screen(pt.x, pt.y);
+      pt = view.world_to_screen(pt.x, pt.y);
       // rotate and translate to arrow_pt and desired angle    
       ctx.save();
       ctx.beginPath();

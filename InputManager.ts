@@ -1,17 +1,16 @@
 module fpm {
-
   export class InputManager {
-
     selected;
     pressed;
-    //x_offset: number; y_offset: number;
     init_drag_x: number; init_drag_y: number;
     init_vx: number; init_vy: number;
     panning;
+    user: User; // ??
 
     
-    constructor() {
+    constructor(user: User) {
       var self = this;
+      this.user = user;
       this.selected = {};
       this.pressed = {};
       this.init_drag_x = 0; this.init_drag_y = 0;
@@ -23,8 +22,8 @@ module fpm {
 	  self.pressed['mouse'] = true;
 	  self.init_drag_x = e.pageX;
 	  self.init_drag_y = e.pageY;
-	  self.init_vx = viewrect.vx;
-	  self.init_vy = viewrect.vy;
+	  self.init_vx = self.user.view.view.x;
+	  self.init_vy = self.user.view.view.y;
 	  
 	  if (e.target.type != 'textarea') {
 	    self.clear_selection();
@@ -42,7 +41,7 @@ module fpm {
 	    node.y_offset = mouse_y - box_y;
 	  }
 
-	  gd.update(graph);
+	  gd.update(self.user);
 	});
       });
 
@@ -54,7 +53,7 @@ module fpm {
 	  self.panning = false;
 	  // how can you this won't run before textbox version (meaning
 	  // textbox wouldn't highlight)?
-	  gd.update(graph);
+	  gd.update(self.user);
 	});
       });
 
@@ -63,6 +62,7 @@ module fpm {
 	  if (self.is_pressed('mouse')) {
 	    var mouse_x = e.pageX; var mouse_y = e.pageY;
 	    // TODO: would prefer not to use this.panning
+	    // but...actually... should probably add a 'dragging' flag too
 	    if (e.target.type == 'textarea' && !self.panning) {
 	      // weird, even when you set to != text area, still drags a bit...
 	      var selected_ids = self.get_selected();
@@ -72,13 +72,13 @@ module fpm {
 		node.move_to(mouse_x - node.x_offset, mouse_y - node.y_offset);
 	      }
 	    } else {
-	      var scale = viewrect.get_scale();
+	      var scale = self.user.view.get_scale();
 	      var world_dx = (e.pageX - self.init_drag_x) / scale.x;
 	      var world_dy = (e.pageY - self.init_drag_y) / scale.y;
-	      viewrect.move_to(self.init_vx - world_dx,
-			       self.init_vy - world_dy);
+	      self.user.view.move_to(self.init_vx - world_dx,
+				     self.init_vy - world_dy);
 	    }
-	    gd.update(graph);
+	    gd.update(self.user);
 	  }
 	});
       });
@@ -109,12 +109,9 @@ module fpm {
 	  case 17: // control
 	    delete self.pressed['ctrl'];
 	    break;
-
       	  }
       	});
       });
-
-      
     }
 
     is_pressed(button: string) {
@@ -149,7 +146,6 @@ module fpm {
     get_selected() {
       return Object.keys(this.selected);
     }
-    
   }
 }
 

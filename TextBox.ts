@@ -6,12 +6,14 @@ module fpm {
     text_area: any; // ...
     x_offset: number; y_offset: number;
     editing: boolean;
+    graph: Graph;
 
     constructor(args) {
       this.id = args.id;
       this.x = args.x; this.y = args.y;
       this.w = args.w; this.h = args.h;
       this.text = args.text;
+      this.graph = args.graph;
 
       this.x_offset = 0; this.y_offset = 0;
       this.editing = false;
@@ -36,12 +38,10 @@ module fpm {
 	    var selected = im.get_selected();
 	    if (selected.length == 1) {
 	      var pred = im.selected[selected[0]];  // ugh pls switch to ids
-	      console.log(pred);
-	      if (!graph.edge_exists(pred, textbox)) {
-		graph.add_edge(pred, textbox);
+	      if (!textbox.graph.edge_exists(pred, textbox)) {
+		textbox.graph.add_edge(pred, textbox);
 	      } else {
-		console.log('deleting?');
-		graph.remove_edge(pred, textbox);
+		textbox.graph.remove_edge(pred, textbox);
 	      }
 	    }
 	  } else {
@@ -68,8 +68,8 @@ module fpm {
       $('#myDiv').append(this.text_area);
     }
 
-    draw() {
-      var scaled = this.calculate_scaled();
+    draw(view: ViewRect) {  // should be graph?
+      var scaled = this.calculate_scaled(view);
       var color = 'black';
       if (im.is_selected(this)) {
 	color = 'red';
@@ -80,15 +80,15 @@ module fpm {
 	"border-color": color});
     }
 
-    calculate_scaled() {
-      var scale = viewrect.get_scale();
-      return {x: (this.x - viewrect.vx) * scale.x,
-	      y: (this.y - viewrect.vy) * scale.y,
+    calculate_scaled(view: ViewRect) {
+      var scale = view.get_scale();
+      return {x: (this.x - view.view.x) * scale.x,
+	      y: (this.y - view.view.y) * scale.y,
 	      w: scale.x, h: scale.y};
     }
 
-    move_to(x: number, y: number) {
-      var pt = viewrect.screen_to_world(x, y);
+    move_to(x: number, y: number, view: ViewRect) {
+      var pt = user.view.screen_to_world(x, y);
       this.x = pt.x; this.y = pt.y;
     }
   }

@@ -1,7 +1,5 @@
 module fpm {
-
   export class NodeRegistry {
-
     nodes;
     
     constructor() {
@@ -12,9 +10,8 @@ module fpm {
       return this.nodes[id];
     }
 
-    set(id, object) {
-      this.nodes[id] = object;
+    add(node) {
+      this.nodes[node.id] = node;
     }
   }
-  
 }

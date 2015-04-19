@@ -1,4 +1,3 @@
-
 module fpm {
   export interface GraphNode {
     id: string;
@@ -8,13 +7,24 @@ module fpm {
     // want func like move_to?
   }
 
-  export class Graph {
+  export class Graph implements GraphNode {
+    // GraphNode stuff - mostly for when graph is being shown as a node.
+    id: string;
+    x: number; y: number; w: number; h: number;
+    // Graph-y stuff.
     nodes;
     edges;  // Track edges separately to make GraphNode more minimal.
-    
-    constructor() {
+    default_view: ViewParams;
+
+    constructor(args) {
+      this.id = args.id;
+      this.x = args.x; this.y = args.y;
+      this.w = args.w; this.h = args.h;
+      
       this.nodes = {};
       this.edges = {};
+      // probably make this private
+      this.default_view = new ViewParams(0, 0, 500, 500);
     }
     
     add_node(node: GraphNode) {
