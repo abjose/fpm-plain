@@ -65,6 +65,20 @@ module fpm {
 	textbox.editing = false;
       });
 
+      $(function(){
+      	$(document).keydown(function(e){
+      	  console.log(e.keyCode);
+      	  switch (e.keyCode) {
+	  case 46: // delete
+	    if (!textbox.editing && textbox.id in im.selected) {
+	      textbox.clear();
+	      // memory leak?
+	    }
+	    break;
+      	  }
+      	});
+      });
+      
       $('#myDiv').append(this.text_area);
     }
 
@@ -78,6 +92,10 @@ module fpm {
 	"left": scaled.x+'px', "top": scaled.y+'px',
 	"transform": "scale("+scaled.w+","+scaled.h+")"​,
 	"border-color": color});
+    }
+
+    clear() {
+      $(this.text_area).remove();
     }
 
     calculate_scaled(view: ViewRect) {
