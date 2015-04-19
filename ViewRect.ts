@@ -18,26 +18,26 @@ module fpm {
       this.user = user;
       var self = this;
 
-      $(function(){
-	$(document).keydown(function(e){
-	  //console.log(e.keyCode);
-	  switch (e.keyCode) {
-	  case 37: // left
-	    self.view.x -= 10;
-	    break;
-	  case 38: // up
-	    self.view.y -= 10;
-	    break;
-	  case 39: // right
-	    self.view.x += 10;
-	    break;
-	  case 40: // down
-	    self.view.y += 10;
-	    break;
-	  }
-	  gd.update(self.user);
-	});
-      });
+      // $(function(){
+      // 	$(document).keydown(function(e){
+      // 	  //console.log(e.keyCode);
+      // 	  switch (e.keyCode) {
+      // 	  case 37: // left
+      // 	    self.view.x -= 10;
+      // 	    break;
+      // 	  case 38: // up
+      // 	    self.view.y -= 10;
+      // 	    break;
+      // 	  case 39: // right
+      // 	    self.view.x += 10;
+      // 	    break;
+      // 	  case 40: // down
+      // 	    self.view.y += 10;
+      // 	    break;
+      // 	  }
+      // 	  gd.update(self.user);
+      // 	});
+      // });
 
       $(function(){
 	$(document).on('wheel', function(e){
