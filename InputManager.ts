@@ -44,8 +44,6 @@ module fpm {
 	  gd.update(self.user);
 	});
       });
-
-      // screwing up a bit when multiple selections and resize one
       
       $(function(){
 	$(document).mouseup(function(e){
@@ -145,6 +143,23 @@ module fpm {
 
     get_selected() {
       return Object.keys(this.selected);
+    }
+
+    notify_click(node: GraphNode) {
+      if (this.is_pressed('ctrl')) {
+	var selected = this.get_selected();
+	if (selected.length == 1) {
+	  var pred = this.selected[selected[0]];  // ugh pls switch to ids
+	  if (!node.graph.edge_exists(pred, node)) {
+	    node.graph.add_edge(pred, node);
+	  } else {
+	    node.graph.remove_edge(pred, node);
+	  }
+	}
+      } else {
+	this.conditional_clear_selection(node);
+	this.add_selection(node);
+      }
     }
   }
 }

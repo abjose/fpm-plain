@@ -21,6 +21,7 @@ module fpm {
       var textbox = this;
 
       this.text_area = $('<textarea>').css({
+	"id": this.id,
 	"position": "absolute",
 	"left": this.x,
 	"top": this.y,
@@ -31,23 +32,8 @@ module fpm {
 
       $(this.text_area).mousedown(function(e) {
 	if (!textbox.editing) {
-	  // Kinda like without preventDefault, can edit immediately.
-	  // but selection issues...
 	  e.preventDefault();
-	  if (im.is_pressed('ctrl')) {
-	    var selected = im.get_selected();
-	    if (selected.length == 1) {
-	      var pred = im.selected[selected[0]];  // ugh pls switch to ids
-	      if (!textbox.graph.edge_exists(pred, textbox)) {
-		textbox.graph.add_edge(pred, textbox);
-	      } else {
-		textbox.graph.remove_edge(pred, textbox);
-	      }
-	    }
-	  } else {
-	    im.conditional_clear_selection(textbox);
-	    im.add_selection(textbox);
-	  }
+	  im.notify_click(textbox);
 	}
       });
 
@@ -67,12 +53,11 @@ module fpm {
 
       $(function(){
       	$(document).keydown(function(e){
-      	  console.log(e.keyCode);
+      	  //console.log(e.keyCode);
       	  switch (e.keyCode) {
 	  case 46: // delete
 	    if (!textbox.editing && textbox.id in im.selected) {
 	      textbox.clear();
-	      // memory leak?
 	    }
 	    break;
       	  }
@@ -96,6 +81,9 @@ module fpm {
 
     clear() {
       $(this.text_area).remove();
+      // memory leak?
+      // need to remove from graph and stuff
+      // or consider having separate 'hide' and 'remove' fncs
     }
 
     calculate_scaled(view: ViewRect) {
