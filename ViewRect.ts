@@ -63,24 +63,22 @@ module fpm {
       var scale = this.get_scale();
       return {x: (x - this.view.x) * scale.x,
 	      y: (y - this.view.y) * scale.y,
-	      sx: scale.x, sy: scale.y};
+	      w: scale.x, h: scale.y};
     }
     
     screen_to_world(x: number, y: number) {
       var scale = this.get_scale();
       return {x: x / scale.x + this.view.x,
 	      y: y / scale.y + this.view.y,
-	      sx: 1 / scale.x, sy: 1 / scale.y};
+	      w: 1 / scale.x, h: 1 / scale.y};
     }
     
-    //scale_at_point(x: number, y: number, scale: number) {}
     zoom_center(scale_factor: number) {
       var center = this.get_view_center();
       this.view.w *= scale_factor;
       this.view.h *= scale_factor;
       this.view.x = center.x - this.view.w / 2;
       this.view.y = center.y - this.view.h / 2;
-      //this.y = 2 * this.y / this.h + 1 - scale_factor;
     }
     
     get_view_center() {

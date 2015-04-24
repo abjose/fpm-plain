@@ -36,8 +36,8 @@ module fpm {
       ctx.beginPath();
       var p1 = view.world_to_screen(node1.x, node1.y);
       var p2 = view.world_to_screen(node2.x, node2.y);
-      ctx.moveTo(p1.x + node1.w * p1.sx / 2, p1.y + node1.h * p1.sy / 2);
-      ctx.lineTo(p2.x + node2.w * p2.sx / 2, p2.y + node2.h * p2.sy / 2);
+      ctx.moveTo(p1.x + node1.w * p1.w / 2, p1.y + node1.h * p1.h / 2);
+      ctx.lineTo(p2.x + node2.w * p2.w / 2, p2.y + node2.h * p2.h / 2);
       ctx.stroke();
       this.draw_arrow(node1, node2, ctx, view);
     }

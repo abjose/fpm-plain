@@ -55,7 +55,7 @@ module fpm {
     }
 
     draw(view: ViewRect) {  // should be graph?
-      var scaled = this.calculate_scaled(view);
+      var scaled = view.world_to_screen(this.x, this.y);
       var color = 'black';
       if (im.is_selected(this)) {
 	color = 'red';
@@ -71,13 +71,6 @@ module fpm {
       // memory leak?
       // need to remove from graph and stuff
       // or consider having separate 'hide' and 'remove' fncs
-    }
-
-    calculate_scaled(view: ViewRect) {
-      var scale = view.get_scale();
-      return {x: (this.x - view.view.x) * scale.x,
-	      y: (this.y - view.view.y) * scale.y,
-	      w: scale.x, h: scale.y};
     }
 
     move_to(x: number, y: number, view: ViewRect) {
