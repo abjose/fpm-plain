@@ -23,8 +23,10 @@ module fpm {
 	  self.init_drag_y = e.pageY;
 	  self.init_vx = self.user.view.view.x;
 	  self.init_vy = self.user.view.view.y;
-	  
-	  if (e.target.type != 'textarea') {
+
+	  //if (e.target.type != 'textarea') {
+	  if (e.target.parentElement == null ||
+	      e.target.parentElement.id != 'myDiv') {  // todo: bad
 	    self.clear_selection();
 	    self.panning = true;
 	  }
@@ -60,13 +62,20 @@ module fpm {
 	    var mouse_x = e.pageX; var mouse_y = e.pageY;
 	    // TODO: would prefer not to use this.panning
 	    // but...actually... should probably add a 'dragging' flag too
-	    if (e.target.type == 'textarea' && !self.panning) {
+	    //if (e.target.type == 'textarea' && !self.panning) {
+	    if (!self.panning &&
+		e.target.parentElement != null && // todo: bad
+		e.target.parentElement.id == 'myDiv') {  
+	      //if (e.target.type != undefined && !self.panning) {
 	      // weird, even when you set to != text area, still drags a bit...
+	      // yes, and if you're dragging somethign and slip off
+	      // without lifting mouse, will pan...
 	      var selected_ids = self.get_selected();
 	      for (var i = 0; i < selected_ids.length; ++i) {
 		var node = self.selected[selected_ids[i]];
-		if (node.editing) continue;
-		node.move_to(mouse_x - node.x_offset, mouse_y - node.y_offset);
+		if (node.editing != undefined && node.editing) continue;
+		node.move_to(mouse_x - node.x_offset, mouse_y - node.y_offset,
+			     self.user.view);
 	      }
 	    } else {
 	      var scale = self.user.view.get_scale();
@@ -94,7 +103,6 @@ module fpm {
 	    break;
 	  case 46: // delete
 	    self.pressed['delete'] = true;
-	    console.log(self.selected);
 	    var selection = Object.keys(self.selected);
 	    for (var i = 0; i < selection.length; ++i) {
 	      var node = self.selected[selection[i]];
@@ -148,10 +156,10 @@ module fpm {
 
     conditional_clear_selection(node) {
       if (!im.is_pressed('shift')) {
-	if (Object.keys(this.selected).length == 1 ||
-	    !(node.id in this.selected)) {
-	  this.clear_selection();
-	}
+      	if (Object.keys(this.selected).length == 1 ||
+      	    !(node.id in this.selected)) {
+      	  this.clear_selection();
+      	}
       }
     }
 

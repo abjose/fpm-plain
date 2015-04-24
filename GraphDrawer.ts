@@ -4,7 +4,7 @@ module fpm {
     constructor() {}
 
     update(user: User) {
-      this.draw_edges(user.get_graph() , user.view);
+      this.draw_edges(user.get_graph(), user.view);
       this.draw_nodes(user.get_graph(), user.view);
     }
 
