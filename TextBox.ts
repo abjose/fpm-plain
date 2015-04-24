@@ -50,19 +50,6 @@ module fpm {
       $(this.text_area).blur(function() {
 	textbox.editing = false;
       });
-
-      $(function(){
-      	$(document).keydown(function(e){
-      	  //console.log(e.keyCode);
-      	  switch (e.keyCode) {
-	  case 46: // delete
-	    if (!textbox.editing && textbox.id in im.selected) {
-	      textbox.clear();
-	    }
-	    break;
-      	  }
-      	});
-      });
       
       $('#myDiv').append(this.text_area);
     }

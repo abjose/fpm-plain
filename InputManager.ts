@@ -6,7 +6,6 @@ module fpm {
     init_vx: number; init_vy: number;
     panning;
     user: User; // ??
-
     
     constructor(user: User) {
       var self = this;
@@ -93,6 +92,18 @@ module fpm {
 	  case 17: // control
 	    self.pressed['ctrl'] = true;
 	    break;
+	  case 46: // delete
+	    self.pressed['delete'] = true;
+	    console.log(self.selected);
+	    var selection = Object.keys(self.selected);
+	    for (var i = 0; i < selection.length; ++i) {
+	      var node = self.selected[selection[i]];
+	      if ((node.editing != undefined && !node.editing) ||
+		  (node.editing == undefined)) {
+		node.clear();
+	      }
+	    }
+	    break;
       	  }
       	});
       });
@@ -106,6 +117,9 @@ module fpm {
 	    break;
 	  case 17: // control
 	    delete self.pressed['ctrl'];
+	    break;
+	  case 46: // delete
+	    delete self.pressed['delete'];
 	    break;
       	  }
       	});
@@ -163,4 +177,5 @@ module fpm {
     }
   }
 }
+
 
