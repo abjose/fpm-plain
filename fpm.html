@@ -10,14 +10,30 @@
         position: absolute;
         margin: 0px;
         padding: 0px;
+        top: 25px;
+        left: 0px;
         width: 500px;
         height: 500px;
         overflow: hidden;
-        border:thin black solid;
+        border: thin black solid;
+        background-color : transparent;
+      }
+      #toolbar {
+        position: absolute;
+        margin: 0px;
+        padding: 0px;
+        top: 0px;
+        left: 0px;
+        width: 500px;
+        height: 24px;
+        overflow: hidden;
+        border: thin black solid;
         background-color : transparent;
       }
       #myCanvas {
         position: absolute;
+        top: 25px; <!--should set automatically-->
+        left: 0px; 
       }
       textarea {
         -webkit-box-sizing: border-box;
@@ -29,6 +45,13 @@
   <body>
     <canvas id="myCanvas" width="500" height="500"></canvas>
     <div id="myDiv"></div>
+    <div id="toolbar">
+      <input type="button" id="back" value="<-">
+      <select id="ToolChoice">
+	<option>text</option> <!--should set automatically-->
+	<option>graph</option>
+      </select>
+    </div>
     <script type="text/javascript" src="jquery.js"></script>
     <script type="text/javascript" src="fpm.js"></script>
   </body>
