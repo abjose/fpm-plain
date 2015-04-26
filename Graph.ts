@@ -76,15 +76,24 @@ module fpm {
 	  "width": this.w,
 	  "height": this.h,
 	  "transform-origin": "0% 0%",
-	});//.val(this.id);
+	  "border": "black 1px solid",
+	  "text-align": "center",
+	  "line-height": self.h+"px",
+	}).text(this.id);
 
 	$(this.text_area).mousedown(function(e) {
 	  im.notify_click(self);
 	});
+
+	$(this.text_area).dblclick(function(e) {
+	  gd.clear_nodes(user.get_graph());
+	  user.set_graph(self);
+	  gd.update(user);
+	});
 	
 	$('#myDiv').append(this.text_area);
       }
-
+      $(this.text_area).show();
       var scaled = view.world_to_screen(this.x, this.y);
       var color = 'black';
       if (im.is_selected(this)) {
@@ -93,7 +102,7 @@ module fpm {
       $(this.text_area).css({
 	"left": scaled.x+'px', "top": scaled.y+'px',
 	"transform": "scale("+scaled.w+","+scaled.h+")"​,
-	"background-color": color});
+	"border-color": color});
     }
 
     move_to(x: number, y: number, view: ViewRect) {
@@ -102,7 +111,7 @@ module fpm {
     }
 
     clear() {
-      $(this.text_area).remove();
+      $(this.text_area).hide();
     }
     
   }

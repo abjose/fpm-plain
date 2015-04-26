@@ -10,8 +10,7 @@ module fpm {
 
     constructor(args) {
       this.id = args.id;
-      this.x = args.x; this.y = args.y;
-      this.w = args.w; this.h = args.h;
+      this.x = args.x; this.y = args.y; this.w = args.w; this.h = args.h;
       this.text = args.text;
       this.graph = args.graph;
 
@@ -21,7 +20,6 @@ module fpm {
       var textbox = this;
 
       this.text_area = $('<textarea>').css({
-	"id": this.id,
 	"position": "absolute",
 	"left": this.x,
 	"top": this.y,
@@ -55,6 +53,7 @@ module fpm {
     }
 
     draw(view: ViewRect) {  // should be graph?
+      $(this.text_area).show();
       var scaled = view.world_to_screen(this.x, this.y);
       var color = 'black';
       if (im.is_selected(this)) {
@@ -67,10 +66,11 @@ module fpm {
     }
 
     clear() {
-      $(this.text_area).remove();
-      // memory leak?
-      // need to remove from graph and stuff
-      // or consider having separate 'hide' and 'remove' fncs
+      $(this.text_area).hide();
+      // TODO: Probably also need a 'remove' func that takes out
+      // or registry, deletes DOM node, etc.
+      // TODO: maybe should pass graph/user - don't want to remove from _all_ 
+      // graphs (unless you do)
     }
 
     move_to(x: number, y: number, view: ViewRect) {

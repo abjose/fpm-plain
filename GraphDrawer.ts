@@ -16,10 +16,19 @@ module fpm {
       }
     }
 
+    clear_nodes(graph: Graph) {
+      var node_ids = Object.keys(graph.nodes);
+      for (var i = 0; i < node_ids.length; i++) {
+	// DO THIS THROUGH REGISTRY!!
+	var node = graph.nodes[node_ids[i]];
+	node.clear();
+      }
+    }
+
     draw_edges(graph: Graph, view: ViewRect) {
       var canvas = document.getElementById('myCanvas');
       var ctx = canvas.getContext('2d');
-      ctx.clearRect (0, 0, canvas.width, canvas.height );
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
       var node_ids = Object.keys(graph.nodes);
       for (var i = 0; i < node_ids.length; i++) {
 	var node1 = graph.nodes[node_ids[i]];
