@@ -91,7 +91,7 @@ module fpm {
 
       // TODO: move these (and other ones) to their own functions so constructor
       // isn't enormous.
-      $(function(){
+      $(function() {
       	$(document).keydown(function(e){
       	  //console.log(e.keyCode);
       	  switch (e.keyCode) {
@@ -116,7 +116,7 @@ module fpm {
       	});
       });
 
-      $(function(){
+      $(function() {
       	$(document).keyup(function(e){
       	  //console.log(e.keyCode);
       	  switch (e.keyCode) {
@@ -132,6 +132,46 @@ module fpm {
       	  }
       	});
       });
+
+      // handle 'back'
+      $(function(){
+	$("#back").click(function(e){
+	  console.log("back!");
+	  var old_graph_id = user.pop_graph();
+	  if (old_graph_id != undefined) {
+	    gd.clear_nodes(registry.get(old_graph_id));
+	    gd.update(user);
+	  }
+	});
+      });
+
+      $(function(){
+	$(document).dblclick(function(e){
+	  console.log($("#ToolChoice option:selected").text());
+	  // need to have mapping from tool to actual tool
+	});
+      });
+      
+      /*
+      $(function(){
+	$(document).dblclick(function(e){
+	  if (e.target.type != 'textarea') {
+	    // prevent something in textbox instead of checking target?
+	    var mouse_x = e.pageX;
+	    var mouse_y = e.pageY;
+	    var pt = viewrect.screen_to_world(e.pageX, e.pageY);
+	    var w = 150; var h = 150;
+	    graph.add_node(new fpm.TextBox({
+	      id: "node"+Math.random(),
+	      x: pt.x - w/2, y: pt.y - h/2, w: w, h: h,
+	      text: "New textbox!",
+	    }));
+	    gd.update(graph);
+	  }
+	});
+      });
+      */
+
     }
 
     is_pressed(button: string) {
